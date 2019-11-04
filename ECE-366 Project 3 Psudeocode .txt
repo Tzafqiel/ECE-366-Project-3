@@ -5,7 +5,7 @@ push $3, 0x2
 push $3, 0x2
 
 $2 = 0(Counter)
-push $2, 0x0
+push $2, 0x1
 
 Loop:
 #0 = After fold
