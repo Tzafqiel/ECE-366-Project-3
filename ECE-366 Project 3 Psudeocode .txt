@@ -9,29 +9,29 @@ push $2, 0x1
 
 Loop:
 #0 = After fold
-hfoldR0 $3, $2
+hfold $0, $3, $2
 
 #Store the contents of R0 in R(R2+3)
 sb $0, 3($2)
 
 $Jump neq x???
 jneq $0, 0x0
-lbi $1, 0($?) 
+lbi $1, 0
 addi $1, 0x1
 sb $1, 0($1)
 
 jneq $0, 0x1
-lbi $1, 1($?)
+lbi $1, 1
 addi $1, 0x1
 sb $1, 1($1)
 
 jneq $0, 0x2
-lbi $1, 2($?)
+lbi $1, 2
 addi $1, 0x1
 sb $1, 2($1)
 
 jneq $0, 0x3
-lbi $1, 3($?)
+lbi $1, 3
 addi $1, 0x1
 sb $1, 3($1)
 
