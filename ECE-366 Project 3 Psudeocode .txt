@@ -41,15 +41,15 @@ addi $2, 0x1
 jneq $2, 0x0
 
 #Jump 
-jmp loop1
+jmpb loop1
 
 -----------------------------------------------------------------------------------
 $? = Rail
 
-hfoldR0 - 000 x(rd) xx(rt) xx(rs)
+hfold - 000 x(rd) xx(rt) xx(rs)
 addi - 001 x(rt) xx(rs) yy(imm)
 push - 010 x(rt) xx(rs) yy(imm)
-jneq - 011 x(rt) xx(rs) yy(imm)
+jneqR0 - 011 x(rt) xx(rs) yy(imm)
 sb - 100 x(rt) xx(rs) yy(imm)
 lbi - 101 x(rt) xx(rs) yy(imm)
 jmpb - 111 xxxxx(imm)
