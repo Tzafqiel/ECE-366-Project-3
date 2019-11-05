@@ -25,21 +25,92 @@ def main():
 
     # this block creates ann array for all the registers and at the same time it allocates space for lo hi and pc
     reg = []
-    for i in range(7):  # lo == index 24 hi == index 25  PC == index 26
+    for i in range(5):  # lo == index 24 hi == index 25  PC == index 26
         reg.append('00000000')
-        print('r', i, reg[i]) if (i < 4) else print('hi, lo or pc', i, reg[i])
+        print('r', i, reg[i]) if (i < 4) else print('pc', i, reg[i])
 
     # this will make accessing lo, hi, pc easy to remember
-    lo = 4  # reg[lo]    reg[8] reg[pc] reg[23]
-    hi = 5  # reg[hi]
-    pc = 6  # reg[pc]
-
+    pc = 4  # reg[pc]
     location = 0
-    j = 0
-    line = asm[0]
-    line = ''.join(str(e) for e in line)
+    for line in machinecode:
 
-    while location < len(asm):
+        # TODO CHECK CFOLD FOR REFERENCE
+        if (line[0:3] == "000"):  # hfold
+            rd = registers[("$" + str(int(line[3:4], 2)))]  # rd
+            rt = registers[("$" + str(int(line[4:6], 2)))]  # rt
+            rs = registers[("$" + str(int(line[6:8], 2)))]  # rs
+            instruction = "hfold"
+            ##print (instruction , ("$" + str(int(line[3:4], 2)))) ,("$" + str(int(line[4:6], 2))), ("$" + str(int(line[6:8], 2)))
+            HashAndMatch(rt, rs)
+
+            pc += 1  # increments pc by 1
+        # TODO CHECK ADDI FOR REFERENCE
+        if (line[0:3] == "001"):  # addi
+            rt = registers[("$" + str(int(line[3:4], 2)))]  # rt
+            rs = registers[("$" + str(int(line[4:6], 2)))]  # rs
+            imm = int(line[6:8], 2)  # imm
+            instruction = "addi"
+            print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
+            result = rs + imm  # does the addition operation
+            registers[rt] = result  # writes the value to the register specified
+            print("result:", rt, "=", hex(result))
+            pc += 1  # increments pc by 1
+        # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
+        if (line[0:3] == "011"):  # push
+            rt = registers[("$" + str(int(line[3:4])))]  # rt
+            rs = registers[("$" + str(int(line[4:6])))]  # rs
+            imm = int(line[6:8])  # imm
+            instruction = "push"
+            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            result = rs + imm  # does the addition operation
+            registers[rt] = result  # writes the value to the register specified
+            print("result:", rt, "=", hex(result))
+            pc += 1  # increments pc by 1
+        # TODO  CHECK BNE FOR REFERENCE
+        if (line[0:3] == "100"):  # jneq
+            rt = registers[("$" + str(int(line[3:4])))]  # rt
+            rs = registers[("$" + str(int(line[4:6])))]  # rs
+            imm = int(line[6:8])  # imm
+            instruction = "jneq"
+            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            result = rs + imm  # does the addition operation
+            registers[rt] = result  # writes the value to the register specified
+            print("result:", rt, "=", hex(result))
+            pc += 1  # increments pc by 1
+        # TODO CHECK SB FOR REFERNCE
+        if (line[0:3] == "101"):  # sb
+            rt = registers[("$" + str(int(line[3:4])))]  # rt
+            rs = registers[("$" + str(int(line[4:6])))]  # rs
+            imm = int(line[6:8])  # imm
+            instruction = "sb"
+            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            result = rs + imm  # does the addition operation
+            registers[rt] = result  # writes the value to the register specified
+            print("result:", rt, "=", hex(result))
+            pc += 1  # increments pc by 1
+        # TODO CHECK LBU FOR REFERENCE
+        if (line[0:3] == "110"):  # lbi
+            rt = registers[("$" + str(int(line[3:4])))]  # rt
+            rs = registers[("$" + str(int(line[4:6])))]  # rs
+            imm = int(line[6:8])  # imm
+            instruction = "lbi"
+            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            result = rs + imm  # does the addition operation
+            registers[rt] = result  # writes the value to the register specified
+            print("result:", rt, "=", hex(result))
+            pc += 1  # increments pc by 1
+        # TODO CHECK JUMP FOR REFERENCE
+        if (line[0:3] == "111"):  # jmp
+            imm = int(line[6:8])  # imm
+            instruction = "jmp"
+            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+
+            print("result:", rt, "=", hex(result))
+            pc += 1  # increments pc by 1
+
+
+
+
         ##if j == 8:
         ##  location = 10
         ##line = asm[location]
@@ -502,36 +573,34 @@ def main():
             DIC = DIC + 1
             # print(int(DIC), "DIC")
 
-        if location != len(asm):
-            line = asm[location]
-            line = ''.join(str(e) for e in line)
+
     # print(location)
-    reg[pc] = format(location * 4, '08x')
+    #reg[pc] = format(location * 4, '08x')
     # print(reg[pc])
     g = 0
-    for i in range(64):
-        f.write(memory[i][4] + ' ' + memory[i][3] + memory[i][2] + memory[i][1] + memory[i][0] + ' ') if (
-                    g != 9) else f.write(
-            memory[i][4] + ' ' + memory[i][3] + memory[i][2] + memory[i][1] + memory[i][0] + '\n')
-        g = g + 1
+    ##for i in range(64):
+      #  f.write(memory[i][4] + ' ' + memory[i][3] + memory[i][2] + memory[i][1] + memory[i][0] + ' ') if (
+       #             g != 9) else f.write(
+        #    memory[i][4] + ' ' + memory[i][3] + memory[i][2] + memory[i][1] + memory[i][0] + '\n')
+        #g = g + 1
 
-        if g == 8:
-            f.write('\n')
-            g = 0
-    f.write('\n')
-    for i in range(27):
-        t = format(i)
-        if (i == 0 or 7 < i < 24):
-            f.write('$' + t + ' ' + reg[i] + '\n')
-        if (i == 24):
-            f.write('lo' + '  ' + reg[i] + '\n')
-        if (i == 25):
-            f.write('hi' + '  ' + reg[i] + '\n')
-        if (i == 26):
-            f.write('pc' + '  ' + reg[i] + '\n')
-    f.write('Dynamic instruction count is:' + format(DIC + 1))
-    f.close()
-    print('DIC is:', DIC)
+        #if g == 8:
+         #   f.write('\n')
+          #  g = 0
+    #f.write('\n')
+    #for i in range(27):
+     #   t = format(i)
+      #  if (i == 0 or 7 < i < 24):
+       #     f.write('$' + t + ' ' + reg[i] + '\n')
+        #if (i == 24):
+         #   f.write('lo' + '  ' + reg[i] + '\n')
+        #if (i == 25):
+         #   f.write('hi' + '  ' + reg[i] + '\n')
+        #if (i == 26):
+         #   f.write('pc' + '  ' + reg[i] + '\n')
+    #f.write('Dynamic instruction count is:' + format(DIC + 1))
+    #f.close()
+    #print('DIC is:', DIC)
 
 
 if __name__ == "__main__":
