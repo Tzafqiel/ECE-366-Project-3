@@ -75,7 +75,7 @@ def main():
             c = format(c, '04b')
             c = int(c[:2], 2) ^ int(c[2:], 2)
             # now does pattern matachin of C
-            c = format(c, '02b')
+            c = format(c, '08b')
             reg[rd] = c
             print('hfoldresult', c)
 
@@ -88,7 +88,8 @@ def main():
             instruction = "addi"
             ##print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
             result = rs + imm  # does the addition operation
-            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            reg[rt] = format(result, '08b')
+            reg[rt] = reg[rt][1:]
             #print("result:", rt, "=", hex(result))
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
@@ -100,7 +101,7 @@ def main():
             #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             rs = rs <<2
             result = rs ^ imm  # does the addition operation
-            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            reg[rt] = format(result, '08b')  # writes the value to the register specified
             #print("result:", rt, "=", hex(result))
         # TODO  CHECK BNE FOR REFERENCE
         if (line[0:3] == "100"):  # jneq
@@ -122,7 +123,7 @@ def main():
             #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
 
-            reg[rd] = mem[memlocal]
+            mem[memlocal] = reg[rd]
 
             #print("result:", rt, "=", hex(result))
 
@@ -134,8 +135,11 @@ def main():
             instruction = "lbi"
             #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
 
-            print("result:", rt, "=", hex(result))
-            pc += 1  # increments pc by 1
+            memlocal = imm
+            reg[rd] = mem[memlocal]
+
+            #print("result:", rt, "=", hex(result))
+
         # TODO CHECK JUMP FOR REFERENCE
         if (line[0:3] == "111"):  # jmp
             imm = int(line[6:8])  # imm
@@ -145,7 +149,7 @@ def main():
             print("result:", rt, "=", hex(result))
             pc += 1  # increments pc by 1
 
-        if location != len(machinecode):
+        if location < len(machinecode):
             line = machinecode[location]
             line = ''.join(str(e) for e in line)
 
