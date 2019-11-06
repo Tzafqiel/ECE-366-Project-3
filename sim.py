@@ -1,3 +1,20 @@
+#Function call for hfold
+def HashAndfold(rt, rs, rd):
+    for i in range(0, 5):
+        tmp = rt * rs
+        tmp = format(tmp, '016b')
+        hi2 = int(tmp[:8], 2)
+        lo2 = int(tmp[8:], 2)
+        a = hi2 ^ lo2
+    a = format(a, '08b')
+    c = int(a[:4], 2) ^ int(a[4:], 2)
+    c = format(c, '04b')
+    c = int(c[:2], 2) ^ int(c[2:], 2)
+   # now does pattern matachin of C
+    c = format(c, '02b')
+    reg[rd] = c
+
+
 def main():
     DIC = 0
     labelIndex = []
@@ -31,21 +48,40 @@ def main():
 
     # this will make accessing lo, hi, pc easy to remember
     pc = 4  # reg[pc]
-    location = 0
-    for line in machinecode:
 
+    location = 0
+    line = machinecode[0]
+    line = ''.join(str(e) for e in line)
+
+    while location < len(machinecode):
+
+        # this may need to go at the bottom
+        location += 1
         # TODO CHECK CFOLD FOR REFERENCE
-        if (line[0:3] == "000"):  # hfold
-            rd = registers[("$" + str(int(line[3:4], 2)))]  # rd
-            rt = registers[("$" + str(int(line[4:6], 2)))]  # rt
-            rs = registers[("$" + str(int(line[6:8], 2)))]  # rs
+        if line[0:3] == "000":  # hfold
+            rd = int(line[3:4], 2)  # rd
+            rt = int(line[4:6], 2)  # rt
+            rs = int(line[6:8], 2)  # rs
             instruction = "hfold"
             ##print (instruction , ("$" + str(int(line[3:4], 2)))) ,("$" + str(int(line[4:6], 2))), ("$" + str(int(line[6:8], 2)))
-            HashAndMatch(rt, rs)
+            for i in range(0, 5):
+                tmp = rt * rs
+                tmp = format(tmp, '016b')
+                hi2 = int(tmp[:8], 2)
+                lo2 = int(tmp[8:], 2)
+                a = hi2 ^ lo2
+            a = format(a, '08b')
+            c = int(a[:4], 2) ^ int(a[4:], 2)
+            c = format(c, '04b')
+            c = int(c[:2], 2) ^ int(c[2:], 2)
+            # now does pattern matachin of C
+            c = format(c, '02b')
+            reg[rd] = c
+            print('hfoldresult', c)
 
             pc += 1  # increments pc by 1
         # TODO CHECK ADDI FOR REFERENCE
-        if (line[0:3] == "001"):  # addi
+        if line[0:3] == "001":  # addi
             rt = registers[("$" + str(int(line[3:4], 2)))]  # rt
             rs = registers[("$" + str(int(line[4:6], 2)))]  # rs
             imm = int(line[6:8], 2)  # imm
@@ -108,7 +144,9 @@ def main():
             print("result:", rt, "=", hex(result))
             pc += 1  # increments pc by 1
 
-
+        if location != len(machinecode):
+            line = machinecode[location]
+            line = ''.join(str(e) for e in line)
 
 
         ##if j == 8:
