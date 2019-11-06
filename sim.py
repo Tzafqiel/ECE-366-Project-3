@@ -79,40 +79,40 @@ def main():
             reg[rd] = c
             print('hfoldresult', c)
 
-            pc += 1  # increments pc by 1
         # TODO CHECK ADDI FOR REFERENCE
         if line[0:3] == "001":  # addi
-            rt = registers[("$" + str(int(line[3:4], 2)))]  # rt
-            rs = registers[("$" + str(int(line[4:6], 2)))]  # rs
+            rt = int(line[3:4], 2)  # rt
+            rs = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
+
             instruction = "addi"
-            print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
+            ##print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
             result = rs + imm  # does the addition operation
-            registers[rt] = result  # writes the value to the register specified
-            print("result:", rt, "=", hex(result))
-            pc += 1  # increments pc by 1
+            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            #print("result:", rt, "=", hex(result))
+
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
         if (line[0:3] == "011"):  # push
-            rt = registers[("$" + str(int(line[3:4])))]  # rt
-            rs = registers[("$" + str(int(line[4:6])))]  # rs
-            imm = int(line[6:8])  # imm
+            rt = int(line[3:4], 2)  # rt
+            rs = int(line[4:6], 2)  # rs
+            imm = int(line[6:8], 2)  # imm
             instruction = "push"
-            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            result = rs + imm  # does the addition operation
-            registers[rt] = result  # writes the value to the register specified
-            print("result:", rt, "=", hex(result))
-            pc += 1  # increments pc by 1
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            rs = rs <<2
+            result = rs ^ imm  # does the addition operation
+            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            #print("result:", rt, "=", hex(result))
         # TODO  CHECK BNE FOR REFERENCE
         if (line[0:3] == "100"):  # jneq
-            rt = registers[("$" + str(int(line[3:4])))]  # rt
-            rs = registers[("$" + str(int(line[4:6])))]  # rs
-            imm = int(line[6:8])  # imm
+            rs = int(line[3:4], 2)  # rt
+            rt = int(line[4:6], 2)  # rs
+            imm = int(line[6:8], 2)  # imm
             instruction = "jneq"
-            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            result = rs + imm  # does the addition operation
-            registers[rt] = result  # writes the value to the register specified
-            print("result:", rt, "=", hex(result))
-            pc += 1  # increments pc by 1
+            ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            if int(reg[rt]) != int(imm):
+                #this might be buggy
+                location = location + 3
+
         # TODO CHECK SB FOR REFERNCE
         if (line[0:3] == "101"):  # sb
             rt = registers[("$" + str(int(line[3:4])))]  # rt
