@@ -60,8 +60,8 @@ def main():
         # TODO CHECK CFOLD FOR REFERENCE
         if line[0:3] == "000":  # hfold
             rd = int(line[3:4], 2)  # rd
-            rt = int(line[4:6], 2)  # rt
-            rs = int(line[6:8], 2)  # rs
+            rs = int(line[4:6], 2)  # rt
+            rt = int(line[6:8], 2)  # rs
             instruction = "hfold"
             ##print (instruction , ("$" + str(int(line[3:4], 2)))) ,("$" + str(int(line[4:6], 2))), ("$" + str(int(line[6:8], 2)))
             for i in range(0, 5):
@@ -81,8 +81,8 @@ def main():
 
         # TODO CHECK ADDI FOR REFERENCE
         if line[0:3] == "001":  # addi
-            rt = int(line[3:4], 2)  # rt
-            rs = int(line[4:6], 2)  # rs
+            rs = int(line[3:4], 2)  # rt
+            rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
 
             instruction = "addi"
@@ -93,8 +93,8 @@ def main():
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
         if (line[0:3] == "011"):  # push
-            rt = int(line[3:4], 2)  # rt
-            rs = int(line[4:6], 2)  # rs
+            rs = int(line[3:4], 2)  # rt
+            rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
             instruction = "push"
             #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
@@ -115,24 +115,25 @@ def main():
 
         # TODO CHECK SB FOR REFERNCE
         if (line[0:3] == "101"):  # sb
-            rt = registers[("$" + str(int(line[3:4])))]  # rt
-            rs = registers[("$" + str(int(line[4:6])))]  # rs
-            imm = int(line[6:8])  # imm
+            rd = int(line[3:4], 2)  # rt
+            rt = int(line[4:6], 2)  # rs
+            imm = int(line[6:8], 2)  # imm
             instruction = "sb"
-            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            result = rs + imm  # does the addition operation
-            registers[rt] = result  # writes the value to the register specified
-            print("result:", rt, "=", hex(result))
-            pc += 1  # increments pc by 1
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            memlocal = imm + int(reg[rt], 2)
+
+            reg[rd] = mem[memlocal]
+
+            #print("result:", rt, "=", hex(result))
+
         # TODO CHECK LBU FOR REFERENCE
         if (line[0:3] == "110"):  # lbi
-            rt = registers[("$" + str(int(line[3:4])))]  # rt
-            rs = registers[("$" + str(int(line[4:6])))]  # rs
-            imm = int(line[6:8])  # imm
+            rd = int(line[3:4], 2)  # rt
+            rt = int(line[4:6], 2)  # rs
+            imm = int(line[6:8], 2)  # imm
             instruction = "lbi"
-            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            result = rs + imm  # does the addition operation
-            registers[rt] = result  # writes the value to the register specified
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+
             print("result:", rt, "=", hex(result))
             pc += 1  # increments pc by 1
         # TODO CHECK JUMP FOR REFERENCE
