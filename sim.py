@@ -112,7 +112,7 @@ def main():
             # print("result:", rt, "=", hex(result))
 
         # TODO CHECK LBU FOR REFERENCE
-        if (line[0:3] == "110"):  # lbi
+        if (line[0:3] == "101"):  # lbi
             rd = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
