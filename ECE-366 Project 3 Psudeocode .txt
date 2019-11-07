@@ -16,24 +16,24 @@ sb $0, 3($2)
 
 $Jump neq x???
 jneq $0, 0x0
-lbi $1, 0
+lbi $1, 0($0)
 addi $1, 0x1
-sb $1, 0($1)
+sb $1, 0($0)
 
 jneq $0, 0x1
-lbi $1, 1
+lbi $1, 0($0)
 addi $1, 0x1
-sb $1, 1($1)
+sb $1, 0($0)
 
 jneq $0, 0x2
-lbi $1, 2
+lbi $1, 0($0)
 addi $1, 0x1
-sb $1, 2($1)
+sb $1, 0($0)
 
 jneq $0, 0x3
-lbi $1, 3
+lbi $1, 0($0)
 addi $1, 0x1
-sb $1, 3($1)
+sb $1, 0($0)
 
 #Increment Counter
 addi $2, 0x1
@@ -47,13 +47,12 @@ jmpb loop1
 $? = Rail
 
 hfold - 000 x(rd) xx(rt) xx(rs)
-addi - 001 x(rt) xx(rs) yy(imm)
-push - 010 x(rt) xx(rs) yy(imm)
-jneqR0 - 011 x(rt) xx(rs) yy(imm)
-sb - 100 x(rt) xx(rs) yy(imm)
-lbi - 101 x(rt) xx(rs) yy(imm)
+addi - 001 0(X) xx(rt) yy(imm)
+push - 010 0(X) xx(rt) yy(imm)
+jneq - 011 0(X) xx(rt) yy(imm)
+sb - 100 x(rd) xx(rt) yy(imm)
+lbi - 110 x(rt) xx(rs) yy(imm)
 jmpb - 111 xxxxx(imm)
-jmpf - 110 xxxxx(imm)
 
 $0 - Output of Hash and Fold
 $1 - Store and Load
