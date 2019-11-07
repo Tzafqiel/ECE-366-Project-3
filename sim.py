@@ -112,7 +112,7 @@ def main():
             # print("result:", rt, "=", hex(result))
 
         # TODO CHECK LBU FOR REFERENCE
-        if (line[0:3] == "101"):  # lbi
+        if (line[0:3] == "101"):  # lb
             rd = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
@@ -124,7 +124,7 @@ def main():
             print("result:", rt, "=", hex(result))
         # TODO CHECK JUMP FOR REFERENCE
         if (line[0:3] == "111"):  # jmpb
-            imm = int(line[6:8])  # imm
+            imm = int(line[3:8])  # imm
             instruction = "jmp"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
 
