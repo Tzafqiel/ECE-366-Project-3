@@ -75,7 +75,7 @@ def main():
             c = format(c, '04b')
             c = int(c[:2], 2) ^ int(c[2:], 2)
             # now does pattern matachin of C
-            c = format(c, '08b')
+            c = format(c, '02b')
             reg[rd] = c
             print('hfoldresult', c)
 
@@ -88,66 +88,62 @@ def main():
             instruction = "addi"
             ##print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
             result = rs + imm  # does the addition operation
-            reg[rt] = format(result, '08b')
-            reg[rt] = reg[rt][1:]
-            #print("result:", rt, "=", hex(result))
+            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            # print("result:", rt, "=", hex(result))
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
-        if (line[0:3] == "011"):  # push
+        if (line[0:3] == "010"):  # push
             rs = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
             instruction = "push"
-            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            rs = rs <<2
+            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            rs = rs << 2
             result = rs ^ imm  # does the addition operation
-            reg[rt] = format(result, '08b')  # writes the value to the register specified
-            #print("result:", rt, "=", hex(result))
+            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            # print("result:", rt, "=", hex(result))
         # TODO  CHECK BNE FOR REFERENCE
-        if (line[0:3] == "100"):  # jneq
+        if (line[0:3] == "011"):  # jneq
             rs = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
             instruction = "jneq"
             ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             if int(reg[rt]) != int(imm):
-                #this might be buggy
+                # this might be buggy
                 location = location + 3
 
         # TODO CHECK SB FOR REFERNCE
-        if (line[0:3] == "101"):  # sb
+        if (line[0:3] == "100"):  # sb
             rd = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
             instruction = "sb"
-            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
 
             mem[memlocal] = reg[rd]
 
-            #print("result:", rt, "=", hex(result))
+            # print("result:", rt, "=", hex(result))
 
         # TODO CHECK LBU FOR REFERENCE
         if (line[0:3] == "110"):  # lbi
             rd = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
-            instruction = "lbi"
-            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            instruction = "lb"
+            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            memlocal = imm + int(reg[rt], 2)
 
-            memlocal = imm
             reg[rd] = mem[memlocal]
-
-            #print("result:", rt, "=", hex(result))
-
+            print("result:", rt, "=", hex(result))
         # TODO CHECK JUMP FOR REFERENCE
-        if (line[0:3] == "111"):  # jmp
+        if (line[0:3] == "111"):  # jmpb
             imm = int(line[6:8])  # imm
             instruction = "jmp"
-            print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
 
-            print("result:", rt, "=", hex(result))
-            pc += 1  # increments pc by 1
+            location = location - imm
 
         if location < len(machinecode):
             line = machinecode[location]
