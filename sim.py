@@ -45,22 +45,25 @@ def main():
         # TODO CHECK CFOLD FOR REFERENCE
         if line[0:3] == "000":  # hfold
             rd = int(line[3:4], 2)  # rd
-            rs = int(line[4:6], 2)  # rt
-            rt = int(line[6:8], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
+            rs = int(line[6:8], 2)  # rs
             instruction = "hfold"
             # print (instruction , ("$" + str(int(line[3:4], 2)))) ,("$" + str(int(line[4:6], 2))), ("$" + str(int(line[6:8], 2)))
+            rt = int(reg[rt], 2)
+            rs = int(reg[rs], 2)
+
             for i in range(0, 5):
-                tmp = rt * rs
+                tmp = rs * rt
                 tmp = format(tmp, '016b')
                 hi2 = int(tmp[:8], 2)
                 lo2 = int(tmp[8:], 2)
-                a = hi2 ^ lo2
-            a = format(a, '08b')
+                rt = hi2 ^ lo2
+            a = format(rt, '08b')
             c = int(a[:4], 2) ^ int(a[4:], 2)
             c = format(c, '04b')
             c = int(c[:2], 2) ^ int(c[2:], 2)
             # now does pattern matachin of C
-            c = format(c, '02b')
+            c = format(c, '08b')
             reg[rd] = c
             print('hfoldresult', c)
 
@@ -70,10 +73,13 @@ def main():
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
 
+            rtresult = int(reg[rt], 2)
+            rsresult = int(reg[rs], 2)
+
             instruction = "addi"
             # print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
-            result = rs + imm  # does the addition operation
-            reg[rt] = format(result, '02b')  # writes the value to the register specified
+            result = rtresult + imm  # does the addition operation
+            reg[rt] = format(result, '08b')  # writes the value to the register specified
             # print("result:", rt, "=", hex(result))
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
@@ -83,18 +89,27 @@ def main():
             imm = int(line[6:8], 2)  # imm
             instruction = "push"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            rs = rs << 2
-            result = rs ^ imm  # does the addition operation
-            reg[rt] = format(result, '02b')  # writes the value to the register specified
-            print("result:", rt, "=", reg[rt])
+            #print('what is rt before', reg[rt], rt)
+            result = int(reg[rt], 2)
+            #print(rt)
+            result = result << 2
+            #print('rt after shift:', rt)
+            result = result | imm  # does the addition operation
+            #print('result 1 ord:', result)
+            reg[rt] = format(result, '08b')  # writes the value to the register specified
+            #print("result 2:", rt, "=", reg[rt], 'end')
+            #print('----------------------------------------')
+            print(' rt', reg[rt])
         # TODO  CHECK BNE FOR REFERENCE
         if (line[0:3] == "011"):  # jneq
             rs = int(line[3:4], 2)  # rt
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
             instruction = "jneq"
+            print('you are in jump')
             ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             if int(reg[rt]) != int(imm):
+                print('you jumped')
                 # this might be buggy
                 location = location + 3
 
@@ -106,10 +121,10 @@ def main():
             instruction = "sb"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
+            #print('is this the one?', reg[rd], rd, memory[memlocal] )
+            memory[memlocal][0] = reg[rd]
 
-            mem[memlocal] = reg[rd]
-
-            # print("result:", rt, "=", hex(result))
+            print(rd, reg[rd], memlocal, memory[memlocal])
 
         # TODO CHECK LBU FOR REFERENCE
         if (line[0:3] == "101"):  # lb
@@ -120,8 +135,8 @@ def main():
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
 
-            reg[rd] = mem[memlocal]
-            print("result:", rt, "=", hex(result))
+            reg[rd] = memory[memlocal][0]
+            print(rd, reg[rd],memlocal , memory[memlocal])
         # TODO CHECK JUMP FOR REFERENCE
         if (line[0:3] == "111"):  # jmpb
             imm = int(line[3:8])  # imm
@@ -129,7 +144,7 @@ def main():
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
 
             location = location - imm
-
+        #print('end rt', reg[rt])
         DIC += 1
         if location < len(machinecode):
             line = machinecode[location]
