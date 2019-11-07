@@ -51,7 +51,7 @@ addi - 001 0(X) xx(rt) yy(imm)
 push - 010 0(X) xx(rt) yy(imm)
 jneq - 011 0(X) xx(rt) yy(imm)
 sb - 100 x(rd) xx(rt) yy(imm)
-lbi - 110 x(rd) xx(rt) yy(imm)
+lbi - 101 x(rd) xx(rt) yy(imm)
 jmpb - 111 xxxxx(imm)
 
 $0 - Output of Hash and Fold
