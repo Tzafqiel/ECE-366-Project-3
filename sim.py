@@ -60,8 +60,8 @@ def main():
         # TODO CHECK CFOLD FOR REFERENCE
         if line[0:3] == "000":  # hfold
             rd = int(line[3:4], 2)  # rd
-            rs = int(line[4:6], 2)  # rt
-            rt = int(line[6:8], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
+            rs = int(line[6:8], 2)  # rs
             instruction = "hfold"
             ##print (instruction , ("$" + str(int(line[3:4], 2)))) ,("$" + str(int(line[4:6], 2))), ("$" + str(int(line[6:8], 2)))
             for i in range(0, 5):
@@ -81,67 +81,65 @@ def main():
 
         # TODO CHECK ADDI FOR REFERENCE
         if line[0:3] == "001":  # addi
-            rs = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
 
             instruction = "addi"
             ##print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
             result = rs + imm  # does the addition operation
             reg[rt] = format(result, '02b')  # writes the value to the register specified
-            # print("result:", rt, "=", hex(result))
+            #print("result:", rt, "=", hex(result))
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
         if (line[0:3] == "010"):  # push
-            rs = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "push"
-            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            rs = rs << 2
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            rs = rs <<2
             result = rs ^ imm  # does the addition operation
             reg[rt] = format(result, '02b')  # writes the value to the register specified
-            # print("result:", rt, "=", hex(result))
+            #print("result:", rt, "=", hex(result))
         # TODO  CHECK BNE FOR REFERENCE
         if (line[0:3] == "011"):  # jneq
-            rs = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "jneq"
             ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             if int(reg[rt]) != int(imm):
-                # this might be buggy
+                #this might be buggy
                 location = location + 3
 
         # TODO CHECK SB FOR REFERNCE
         if (line[0:3] == "100"):  # sb
-            rd = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rd = int(line[3:4], 2)  # rd
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "sb"
-            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
+            
+            mem[memlocal] = reg[rd] 
 
-            mem[memlocal] = reg[rd]
-
-            # print("result:", rt, "=", hex(result))
-
+            #print("result:", rt, "=", hex(result))
+ 
+            
         # TODO CHECK LBU FOR REFERENCE
-        if (line[0:3] == "110"):  # lbi
-            rd = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+        if (line[0:3] == "101"):  # lbi
+            rd = int(line[3:4], 2)  # rd
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "lb"
-            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
-
+            
             reg[rd] = mem[memlocal]
             print("result:", rt, "=", hex(result))
         # TODO CHECK JUMP FOR REFERENCE
         if (line[0:3] == "111"):  # jmpb
-            imm = int(line[6:8])  # imm
+            imm = int(line[3:8])  # imm
             instruction = "jmp"
-            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            #print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
 
             location = location - imm
 
