@@ -12,7 +12,7 @@ Loop:
 hfold $0, $3, $2
 
 #Store the contents of R0 in R(R2+3)
-sbr $0, 3($2)?
+sb $0, 3($2)
 
 $Jump neq x???
 jneq $0, 0x0
@@ -51,7 +51,6 @@ addi - 001 0(X) xx(rt) yy(imm)
 push - 010 0(X) xx(rt) yy(imm)
 jneq - 011 0(X) xx(rt) yy(imm)
 sb - 100 x(rd) xx(rt) yy(imm)
-sbr - 101 x(rd) xx(rt) yy(imm)???
 lbi - 110 x(rt) xx(rs) yy(imm)
 jmpb - 111 xxxxx(imm)
 
