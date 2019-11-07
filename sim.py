@@ -15,7 +15,7 @@ def main():
     memory = []
 
     g = 0
-    for i in range(256):
+    for i in range(512):
         mem = i
         memory.append(['00000000', mem])
         g = g + 1
@@ -108,7 +108,8 @@ def main():
             instruction = "jneq"
             print('you are in jump')
             ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            if int(reg[rt]) != int(imm):
+            print(reg[rt], imm)
+            if int(reg[rt]) != imm:
                 print('you jumped')
                 # this might be buggy
                 location = location + 3
@@ -122,6 +123,7 @@ def main():
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
             #print('is this the one?', reg[rd], rd, memory[memlocal] )
+            print(memlocal, rd)
             memory[memlocal][0] = reg[rd]
 
             print(rd, reg[rd], memlocal, memory[memlocal])
@@ -139,11 +141,13 @@ def main():
             print(rd, reg[rd],memlocal , memory[memlocal])
         # TODO CHECK JUMP FOR REFERENCE
         if (line[0:3] == "111"):  # jmpb
-            imm = int(line[3:8])  # imm
+            imm = int(line[3:8], 2)  # imm
             instruction = "jmp"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-
+            print('are we here?')
+            print(location, imm)
             location = location - imm
+            print(location)
         #print('end rt', reg[rt])
         DIC += 1
         if location < len(machinecode):
