@@ -5,7 +5,7 @@ def main():
     labelIndex = []
     labelName = []
     f = open("mc.txt", "w+")
-    h = open("testcase.asm", "r")
+    h = open("testcase1.txt", "r")
     machinecode = h.readlines()
     for item in range(machinecode.count('\n')):  # Remove all empty lines '\n'
         machinecode.remove('\n')
@@ -106,11 +106,11 @@ def main():
             rt = int(line[4:6], 2)  # rs
             imm = int(line[6:8], 2)  # imm
             instruction = "jneq"
-            print('you are in jump')
+            print('you are in jump neq')
             ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            print(reg[rt], imm)
+            print('if this are not equal you jump', reg[rt], imm)
             if int(reg[rt]) != imm:
-                print('you jumped')
+                print('you jumped neq')
                 # this might be buggy
                 location = location + 3
 
@@ -123,7 +123,7 @@ def main():
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             memlocal = imm + int(reg[rt], 2)
             #print('is this the one?', reg[rd], rd, memory[memlocal] )
-            print(memlocal, rd)
+            print('sb', memlocal, rd)
             memory[memlocal][0] = reg[rd]
 
             print(rd, reg[rd], memlocal, memory[memlocal])
@@ -144,9 +144,18 @@ def main():
             imm = int(line[3:8], 2)  # imm
             instruction = "jmp"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            print('are we here?')
-            print(location, imm)
+            print('are we jmpb?')
+            print('jmpf lcation and imm', location, imm)
             location = location - imm
+            print(location)
+
+        if (line[0:3] == "110"):  # jmpf
+            imm = int(line[3:8], 2)  # imm
+            instruction = "jmp"
+            # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
+            print('are we jmpf?')
+            print('jmpf lcation and imm', location, imm)
+            location = location + imm
             print(location)
         #print('end rt', reg[rt])
         DIC += 1

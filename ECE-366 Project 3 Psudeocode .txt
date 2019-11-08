@@ -40,7 +40,7 @@ addi $2, 0x1
 
 jneq $2, 0x0
 jmpf end
-addi $0 , 0x0
+addi $0, 0x0
 addi $0, 0x0
 
 #Jump 
