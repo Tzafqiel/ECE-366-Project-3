@@ -69,12 +69,10 @@ def main():
 
         # TODO CHECK ADDI FOR REFERENCE
         if line[0:3] == "001":  # addi
-            rs = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
 
             rtresult = int(reg[rt], 2)
-            rsresult = int(reg[rs], 2)
 
             instruction = "addi"
             # print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
@@ -87,8 +85,7 @@ def main():
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
         if (line[0:3] == "010"):  # push
-            rs = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "push"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
@@ -105,8 +102,7 @@ def main():
             print(' rt', reg[rt])
         # TODO  CHECK BNE FOR REFERENCE
         if (line[0:3] == "011"):  # jneq
-            rs = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "jneq"
             print('you are in jump neq')
@@ -119,8 +115,8 @@ def main():
 
         # TODO CHECK SB FOR REFERNCE
         if (line[0:3] == "100"):  # sb
-            rd = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rd = int(line[3:4], 2)  # rd
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "sb"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
@@ -133,8 +129,8 @@ def main():
 
         # TODO CHECK LBU FOR REFERENCE
         if (line[0:3] == "101"):  # lb
-            rd = int(line[3:4], 2)  # rt
-            rt = int(line[4:6], 2)  # rs
+            rd = int(line[3:4], 2)  # rd
+            rt = int(line[4:6], 2)  # rt
             imm = int(line[6:8], 2)  # imm
             instruction = "lb"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
