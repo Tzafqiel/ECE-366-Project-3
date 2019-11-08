@@ -5,7 +5,7 @@ def main():
     labelIndex = []
     labelName = []
     f = open("mc.txt", "w+")
-    h = open("testcase1.txt", "r")
+    h = open("mc4.txt", "r")
     machinecode = h.readlines()
     for item in range(machinecode.count('\n')):  # Remove all empty lines '\n'
         machinecode.remove('\n')
