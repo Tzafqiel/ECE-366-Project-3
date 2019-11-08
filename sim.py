@@ -79,7 +79,10 @@ def main():
             instruction = "addi"
             # print(instruction, ("$" + str(int(line[3:4], 2))), ("$" + str(int(line[4:6], 2))), imm)
             result = rtresult + imm  # does the addition operation
-            reg[rt] = format(result, '08b')  # writes the value to the register specified
+            if result > 255:
+                result = 0
+            result = format(result, '08b')  # writes the value to the register specified
+            reg[rt] = result
             # print("result:", rt, "=", hex(result))
 
         # TODO MAKE FROM SCRATCH CHECK SLL AND ORI FOR REFERENCE
@@ -108,8 +111,8 @@ def main():
             instruction = "jneq"
             print('you are in jump neq')
             ##print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
-            print('if this are not equal you jump', reg[rt], imm)
-            if int(reg[rt]) != imm:
+            print('if this are not equal you jump',rt ,reg[rt] , imm)
+            if int(reg[rt], 2) != imm:
                 print('you jumped neq')
                 # this might be buggy
                 location = location + 3
@@ -145,9 +148,11 @@ def main():
             instruction = "jmp"
             # print(instruction, ("$" + str(int(line[3:4]))), ("$" + str(int(line[4:6]))), imm)
             print('are we jmpb?')
-            print('jmpf lcation and imm', location, imm)
+            print('jmpb lcation and imm', location, imm)
             location = location - imm
             print(location)
+            print(memory[0], memory[1], memory[2], memory[3])
+            print('-----------------------------------------------------------------------------------')
 
         if (line[0:3] == "110"):  # jmpf
             imm = int(line[3:8], 2)  # imm
@@ -157,25 +162,32 @@ def main():
             print('jmpf lcation and imm', location, imm)
             location = location + imm
             print(location)
+            print(memory[0], memory[1], memory[2], memory[3])
         #print('end rt', reg[rt])
+
         DIC += 1
         if location < len(machinecode):
             line = machinecode[location]
             line = ''.join(str(e) for e in line)
+    print('DIC is', DIC)
 
+    reg[pc] = format(location, '08b')
 
-    #print(location)
-    #reg[pc] = format(location * 4, '08x')
-    # print(reg[pc])
-    #g = 0
-    #for i in range(64):
-        #f.write(memory[i][4] + ' ' + memory[i][3] + memory[i][2] + memory[i][1] + memory[i][0] + ' ') if (g != 9) else f.write(
-         #   memory[i][4] + ' ' + memory[i][3] + memory[i][2] + memory[i][1] + memory[i][0] + '\n')
-        #g = g + 1
+    g = 0
+    for i in range(259):
+        g = g + 1
 
-        #if g == 8:
-         #   f.write('\n')
-          #  g = 0
+        if i < 10:
+            #print('1')
+            print(memory[i]) if (g == 8) else print(memory[i], end="   ")
+        if i < 100 and i > 9:
+            #print('2')
+            print(memory[i]) if (g == 8) else print(memory[i], end="  ")
+        if i > 99:
+            #print('3')
+            print(memory[i]) if (g == 8) else print(memory[i], end=" ")
+        if g == 8:
+            g = 0
     #f.write('\n')
     #for i in range(27):
      #   t = format(i)
